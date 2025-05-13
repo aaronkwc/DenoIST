@@ -27,18 +27,20 @@
 #' # Load example data
 #' mat <- matrix(rpois(1000, lambda = 5), nrow = 10, ncol = 100)
 #' coords <- data.frame(x = runif(100), y = runif(100))
-#' tx <- data.frame(x = runif(100), y = runif(100), qv = runif(100, 0, 1))
+#' tx <- data.frame(x = runif(100), y = runif(100), qv = rep(20, 100))
 #' # Run DenoIST
-#' result <- denoist(mat, coords, tx, distance = 50, nbins = 200, cl = 8, out_dir = "denoist_results")
+#' result <- denoist(mat, coords, tx, distance = 50, nbins = 200, cl = 1, out_dir = "denoist_results")
 #' # Check results
 #' print(result$memberships)
 #' print(result$adjusted_counts)
 #' print(result$params)
 denoist <- function(mat, tx, coords = NULL, distance = 50, nbins = 200, cl = 1, out_dir = NULL){
   # TODO:check input type
-  if(is(mat, "SpatialExperiment")){
+  if(inherits(mat, "SpatialExperiment")){
     coords <- spatialCoords(mat)
     mat <- assay(mat)
+    #remove NegControl and BLANKS
+    mat <- mat[!grepl("NegControl|BLANK", rownames(mat)),]
   }else if(is.null(coords)){
     stop("coords must be provided")
   }
@@ -83,7 +85,7 @@ denoist <- function(mat, tx, coords = NULL, distance = 50, nbins = 200, cl = 1, 
     saveRDS(list(memberships = memberships_matrix,
                  adjusted_counts = adjusted_counts,
                  params = results),
-            file = paste0(out_dir, "/spade_results.rds"))
+            file = paste0(out_dir, "/denoist_results.rds"))
   }
 
   return(list(memberships = memberships_matrix,
