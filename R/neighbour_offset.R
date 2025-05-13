@@ -1,8 +1,8 @@
 #' @title Neighbourhood offset
 #' @description This function calculates the local neighbourhood offset together with ambient background for each cell in a count matrix.
 #' @param mat A count matrix with genes as rows and cells as columns.
-#' @param coords A dataframe with x, y coordinates of each cell as separate columns.
 #' @param tx A transcript dataframe with x, y coordinates and qv values.
+#' @param coords A dataframe with x, y coordinates of each cell as separate columns.
 #' @param tx_x Column name for the x coordinates in the transcripts dataframe.
 #' @param tx_y Column name for the y coordinates in the transcripts dataframe.
 #' @param feature_name Column name for the gene of each transcript in the transcripts dataframe.
@@ -21,8 +21,8 @@
 #' @import flexmix
 #' @export
 local_offset_distance_with_background <- function(mat,
-                                                  coords,
                                                   tx,
+                                                  coords,
                                                   tx_x = "x",
                                                   tx_y = "y",
                                                   feature_name = "gene",
@@ -33,10 +33,11 @@ local_offset_distance_with_background <- function(mat,
   #print(coords[1:5, 1:2])
   message('Calculating global background...')
   # filter by qv20
-  tx <- tx[tx[,'qv'] >= 20,]
+  tx <- tx[tx[['qv']] >= 20,]
+  #print(nrow(tx))
   #print(head(tx))
   # Create hexagonal bins
-  hex_bins <- hexbin(tx[,tx_x], tx[,tx_y], xbins = nbins, IDs = T) # Adjust xbins for resolution
+  hex_bins <- hexbin(tx[[tx_x]], tx[[tx_y]], xbins = nbins, IDs = T) # Adjust xbins for resolution
 
   x_range <- diff(range(tx[,tx_x]))
   hex_radius <- x_range / hex_bins@xbins / sqrt(3)
@@ -70,7 +71,7 @@ local_offset_distance_with_background <- function(mat,
   mo1 <- FLXMRglm(family = "gaussian")
   mo2 <- FLXMRglm(family = "gaussian")
   flexfit <- flexmix(x ~ 1, data = data.frame(x=bin_total), k = 2, model = list(mo1, mo2))
-
+  # Get the parameters of the GMM
   c1 <- parameters(flexfit, component=1)[[1]]
   c2 <- parameters(flexfit, component=2)[[1]]
   # Print the summary of the GMM

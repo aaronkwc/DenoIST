@@ -8,6 +8,9 @@ denoist(
   mat,
   tx,
   coords = NULL,
+  tx_x = "x",
+  tx_y = "y",
+  feature_name = "gene",
   distance = 50,
   nbins = 200,
   cl = 1,
@@ -17,9 +20,15 @@ denoist(
 \arguments{
 \item{mat}{A matrix of counts (genes x cells), or a SpatialExperiment object.}
 
-\item{tx}{A data frame of transcript coordinates (transcripts x 2).}
+\item{tx}{A data frame of transcript with x, y and qv columns.}
 
-\item{coords}{A data frame of coordinates (cells x 2).}
+\item{coords}{A data frame of coordinates (n_cells x 2).}
+
+\item{tx_x}{Column name for the x coordinates in the transcripts dataframe. Default is 'x'.}
+
+\item{tx_y}{Column name for the y coordinates in the transcripts dataframe. Default is 'y'.}
+
+\item{feature_name}{Column name for the gene of each transcript in the transcripts dataframe. Default is 'gene'.}
 
 \item{distance}{The maximum distance to consider for local background estimation.}
 
@@ -48,13 +57,15 @@ It returns a matrix of memberships and adjusted counts for each gene in each cel
 }
 \examples{
 # Load example data
-mat <- matrix(rpois(1000, lambda = 5), nrow = 10, ncol = 100)
-coords <- data.frame(x = runif(100), y = runif(100))
-tx <- data.frame(x = runif(100), y = runif(100), qv = runif(100, 0, 1))
+set.seed(42)
+mat <- matrix(rpois(1000, lambda = 10), nrow = 10, ncol = 100)
+rownames(mat) <- paste0("gene", 1:10)
+coords <- data.frame(x = rnorm(100), y = rnorm(100))
+tx <- data.frame(x = c(rnorm(500), rnorm(500, 3)), y = c(rnorm(500), rnorm(500, 3)), qv = rep(30, 1000), gene = paste0('gene', 1:10))
 # Run DenoIST
-result <- denoist(mat, coords, tx, distance = 50, nbins = 200, cl = 8, out_dir = "denoist_results")
+result <- denoist(mat, tx, coords, distance = 1, nbins = 50, cl = 1, out_dir = "denoist_results")
 # Check results
-print(result$memberships)
-print(result$adjusted_counts)
-print(result$params)
+print(result$memberships[1:5, 1:5])
+print(result$adjusted_counts[1:5, 1:5])
+print(result$params[[1]])
 }

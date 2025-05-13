@@ -6,8 +6,8 @@
 \usage{
 local_offset_distance_with_background(
   mat,
-  coords,
   tx,
+  coords,
   tx_x = "x",
   tx_y = "y",
   feature_name = "gene",
@@ -19,9 +19,9 @@ local_offset_distance_with_background(
 \arguments{
 \item{mat}{A count matrix with genes as rows and cells as columns.}
 
-\item{coords}{A dataframe with x, y coordinates of each cell as separate columns.}
-
 \item{tx}{A transcript dataframe with x, y coordinates and qv values.}
+
+\item{coords}{A dataframe with x, y coordinates of each cell as separate columns.}
 
 \item{tx_x}{Column name for the x coordinates in the transcripts dataframe.}
 

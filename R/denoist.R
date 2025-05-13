@@ -9,8 +9,11 @@
 #' image-based single-cell transcriptomics (IST) data.
 #' It uses a transposed Poisson mixture model to identify contamination.
 #' @param mat A matrix of counts (genes x cells), or a SpatialExperiment object.
-#' @param coords A data frame of coordinates (cells x 2).
-#' @param tx A data frame of transcript coordinates (transcripts x 2).
+#' @param coords A data frame of coordinates (n_cells x 2).
+#' @param tx A data frame of transcript with x, y and qv columns.
+#' @param tx_x Column name for the x coordinates in the transcripts dataframe. Default is 'x'.
+#' @param tx_y Column name for the y coordinates in the transcripts dataframe. Default is 'y'.
+#' @param feature_name Column name for the gene of each transcript in the transcripts dataframe. Default is 'gene'.
 #' @param distance The maximum distance to consider for local background estimation.
 #' @param nbins The number of bins to use for hexagonal binning.
 #' @param cl The number of cores to use for parallel processing.
@@ -25,16 +28,22 @@
 #' It returns a matrix of memberships and adjusted counts for each gene in each cell.
 #' @examples
 #' # Load example data
-#' mat <- matrix(rpois(1000, lambda = 5), nrow = 10, ncol = 100)
-#' coords <- data.frame(x = runif(100), y = runif(100))
-#' tx <- data.frame(x = runif(100), y = runif(100), qv = rep(20, 100))
+#' set.seed(42)
+#' mat <- matrix(rpois(1000, lambda = 10), nrow = 10, ncol = 100)
+#' rownames(mat) <- paste0("gene", 1:10)
+#' coords <- data.frame(x = rnorm(100), y = rnorm(100))
+#' tx <- data.frame(x = c(rnorm(500), rnorm(500, 3)), y = c(rnorm(500), rnorm(500, 3)), qv = rep(30, 1000), gene = paste0('gene', 1:10))
 #' # Run DenoIST
-#' result <- denoist(mat, coords, tx, distance = 50, nbins = 200, cl = 1, out_dir = "denoist_results")
+#' result <- denoist(mat, tx, coords, distance = 1, nbins = 50, cl = 1, out_dir = "denoist_results")
 #' # Check results
-#' print(result$memberships)
-#' print(result$adjusted_counts)
-#' print(result$params)
-denoist <- function(mat, tx, coords = NULL, distance = 50, nbins = 200, cl = 1, out_dir = NULL){
+#' print(result$memberships[1:5, 1:5])
+#' print(result$adjusted_counts[1:5, 1:5])
+#' print(result$params[[1]])
+denoist <- function(mat, tx, coords = NULL,
+                    tx_x = "x",
+                    tx_y = "y",
+                    feature_name = "gene",
+                    distance = 50, nbins = 200, cl = 1, out_dir = NULL){
   # TODO:check input type
   if(inherits(mat, "SpatialExperiment")){
     coords <- spatialCoords(mat)
@@ -54,6 +63,9 @@ denoist <- function(mat, tx, coords = NULL, distance = 50, nbins = 200, cl = 1, 
   off_mat <- local_offset_distance_with_background(mat = mat,
                                                    coords = coords,
                                                    tx = tx,
+                                                   tx_x = tx_x,
+                                                   tx_y = tx_y,
+                                                   feature_name = feature_name,
                                                    distance = distance,
                                                    nbins = nbins,
                                                    cl = cl)
