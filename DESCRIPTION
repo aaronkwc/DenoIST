@@ -1,0 +1,11 @@
+Package: DenoIST
+Title: DenoIST: Denoising Image-based Spatial Transcriptomics data
+Version: 0.1.0
+Authors@R: 
+    person("Aaron", "Kwok", , "akwok@svi.edu.au", role = c("aut", "cre"))
+Description: DenoIST identifies and removes contamination in Image-based Spatial Transcriptomics data using a transposed poisson mixture model with local neighbourhood offsets.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
