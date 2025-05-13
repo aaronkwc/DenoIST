@@ -5,7 +5,7 @@
 #' @param coords A dataframe with x, y coordinates of each cell as separate columns.
 #' @param tx_x Column name for the x coordinates in the transcripts dataframe.
 #' @param tx_y Column name for the y coordinates in the transcripts dataframe.
-#' @param feature_name Column name for the gene of each transcript in the transcripts dataframe.
+#' @param feature_label Column name for the gene of each transcript in the transcripts dataframe.
 #' @param distance The maximum distance to consider for local background estimation.
 #' @param nbins The number of bins to use for hexagonal binning, used for calculating background transcript contamination.
 #' @param cl The number of cores to use for parallel processing.
@@ -16,7 +16,6 @@
 #' @importFrom tidyr pivot_wider
 #' @importFrom tibble column_to_rownames
 #' @importFrom sparseMatrixStats rowSums2
-#' @import stats
 #' @import dplyr
 #' @import flexmix
 #' @export
@@ -25,7 +24,7 @@ local_offset_distance_with_background <- function(mat,
                                                   coords,
                                                   tx_x = "x",
                                                   tx_y = "y",
-                                                  feature_name = "gene",
+                                                  feature_label = "gene",
                                                   distance = 50,
                                                   nbins = 200,
                                                   cl = 1) {
@@ -47,7 +46,7 @@ local_offset_distance_with_background <- function(mat,
 
   # Assign each transcript to a hexbin using the `hexbin` object
   tx$hexbin_id <- hex_bins@cID  # Use the `cID` slot to get the cell IDs for each point
-  tx$feature_name <- tx[,feature_name]
+  tx$feature_name <- tx[,feature_label]
 
   # Group by hexbin and gene to count occurrences
   gene_bin_counts <- tx %>%

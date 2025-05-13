@@ -10,7 +10,7 @@ local_offset_distance_with_background(
   coords,
   tx_x = "x",
   tx_y = "y",
-  feature_name = "gene",
+  feature_label = "gene",
   distance = 50,
   nbins = 200,
   cl = 1
@@ -27,7 +27,7 @@ local_offset_distance_with_background(
 
 \item{tx_y}{Column name for the y coordinates in the transcripts dataframe.}
 
-\item{feature_name}{Column name for the gene of each transcript in the transcripts dataframe.}
+\item{feature_label}{Column name for the gene of each transcript in the transcripts dataframe.}
 
 \item{distance}{The maximum distance to consider for local background estimation.}
 

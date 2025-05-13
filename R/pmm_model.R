@@ -27,7 +27,6 @@
 #' s <- runif(100, min = 0, max = 1)
 #' result <- solve_poisson_mixture(x, s)
 #' print(result)
-#' @import stats
 #' @export
 solve_poisson_mixture <- function(x, s,
                                   max_iter = 5000,

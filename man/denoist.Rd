@@ -10,7 +10,7 @@ denoist(
   coords = NULL,
   tx_x = "x",
   tx_y = "y",
-  feature_name = "gene",
+  feature_label = "gene",
   distance = 50,
   nbins = 200,
   cl = 1,
@@ -28,7 +28,7 @@ denoist(
 
 \item{tx_y}{Column name for the y coordinates in the transcripts dataframe. Default is 'y'.}
 
-\item{feature_name}{Column name for the gene of each transcript in the transcripts dataframe. Default is 'gene'.}
+\item{feature_label}{Column name for the gene of each transcript in the transcripts dataframe. Default is 'gene'.}
 
 \item{distance}{The maximum distance to consider for local background estimation.}
 
@@ -61,9 +61,11 @@ set.seed(42)
 mat <- matrix(rpois(1000, lambda = 10), nrow = 10, ncol = 100)
 rownames(mat) <- paste0("gene", 1:10)
 coords <- data.frame(x = rnorm(100), y = rnorm(100))
-tx <- data.frame(x = c(rnorm(500), rnorm(500, 3)), y = c(rnorm(500), rnorm(500, 3)), qv = rep(30, 1000), gene = paste0('gene', 1:10))
+tx <- data.frame(x = c(rnorm(500), rnorm(500, 3)),
+                 y = c(rnorm(500), rnorm(500, 3)),
+                 qv = rep(30, 1000), gene = paste0('gene', 1:10))
 # Run DenoIST
-result <- denoist(mat, tx, coords, distance = 1, nbins = 50, cl = 1, out_dir = "denoist_results")
+result <- denoist(mat, tx, coords, distance = 1, nbins = 50, cl = 1, out_dir = NULL)
 # Check results
 print(result$memberships[1:5, 1:5])
 print(result$adjusted_counts[1:5, 1:5])
