@@ -22,3 +22,5 @@ Imports:
     SummarizedExperiment,
     tibble,
     tidyr
+Suggests:
+    testthat

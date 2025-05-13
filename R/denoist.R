@@ -36,7 +36,7 @@
 #' print(result$params)
 denoist <- function(mat, tx, coords = NULL, distance = 50, nbins = 200, cl = 1, out_dir = NULL){
   # TODO:check input type
-  if(class(mat) == "SpatialExperiment"){
+  if(is(mat, "SpatialExperiment")){
     coords <- spatialCoords(mat)
     mat <- assay(mat)
   }else if(is.null(coords)){
