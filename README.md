@@ -11,5 +11,6 @@ CHICKEN JOCKEY
 ## Installation:
 
 ```
+BiocManager::install(c('sparseMatrixStats', 'SpatialExperiment','SummarizedExperiment'))
 devtools::install_github("aaronkwc/DenoIST")
 ```
