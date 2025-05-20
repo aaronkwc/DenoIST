@@ -77,4 +77,4 @@ print(res$adjusted_counts)
 
 A brief vignette:
 
-[Denoising healthy lung Xenium data](https://rawcdn.githack.com/aaronkwc/DenoIST/ccecd5de367cdf72e98fb37f0b7b1208cb951e01/vignettes/denoist_spe.html)
+[Denoising healthy lung Xenium data](https://rawcdn.githack.com/aaronkwc/DenoIST/e6683f326a34bc5f779077e9a0435ec8ec2ce831/vignettes/denoist_spe.html)
