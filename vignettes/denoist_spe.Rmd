@@ -1,0 +1,137 @@
+---
+title: "Denoising Imaged-based Spatial Transcriptomics data with DenoIST"
+output: rmarkdown::html_vignette
+author: "Aaron Kwok"
+date: "2025-05-16"
+vignette: >
+  %\VignetteIndexEntry{denoist_spe}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+DenoIST (Denoising Image-based Spatial Transcriptomics) is a method for identifying and removing contamination artefacts in image-based single-cell transcriptomics (IST) data. This vignette shows how to use it with a `SpatialExperiment` object or a matrix with coordinates as a separate input.
+
+# Load data
+
+For demonstration, we will use a small Xenium sample from a lung fibrosis study (Vannan & Lyu et. al, 2025). It can be downloaded at [GSE250346](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE250346).
+
+From the raw Xenium output, we can then construct a `SpatialExperiment` object with `SpatialExperimentIO`.
+
+```{r setup}
+suppressPackageStartupMessages({
+  library(DenoIST)
+  library(SpatialExperiment)
+  library(ggplot2)
+  library(patchwork)
+})
+```
+
+```{r, eval=FALSE}
+dir = "/mnt/beegfs/mccarthy/backed_up/general/rlyu/Dataset/LFST_2022/GEO_2025/VUHD116A/relabel_output-XETG00048__0003817__VUHD116A__20230308__003730/outs/"
+spe <- readXeniumSXE(dir, returnType = "SPE")
+saveRDS(spe, "example_spe.rds")
+```
+
+For this vignette, we will use a pre-saved `SpatialExperiment` object generated from the code above.
+
+```{r load_spe}
+spe <- readRDS('example_spe.rds')
+spe
+```
+
+Since the transcript file is too big to upload, for demonstration we will read in a very small subset to show the what the format is like:
+
+```{r load_data}
+tx <- read.csv('tx_sub.rds')
+tx
+```
+
+
+# Denoising the data
+
+You should only need to use 1 function most of the time, unless you are trying to debug or understand the process. The main function is `denoist()`, which takes a `SpatialExperiment` object (or a matrix with coordinates), plus the transcript data frame as input. It will return a list containing the memberships, adjusted counts, and parameters for each gene.
+
+The `distance` parameter specifies the maximum distance to consider for local background estimation. The `nbins` parameter specifies the number of bins to use for hexagonal binning, which is used for calculating background transcript contamination. They have default values but you can adjust them based on your data. For example if your data is very small in size then perhaps a lower `distance` and `nbins` would be better.
+
+You should also check whether transcript data frame has the correct columns. The `tx_x` and `tx_y` parameters specify the column names for the x and y coordinates, respectively. The `feature_label` parameter specifies the column name for the gene of each transcript. In this example, they are called `x_location`, `y_location` and `feature_name`. You can also speed up the process with more cpus via the `cl` option (which is highly recommended).
+
+Lastly, you can specify an output directory with `out_dir` to save the results automatically. If you don't want to, just leave it empty.
+
+```{r denoist, eval = FALSE}
+# DenoIST
+result <- denoist(mat = spe, tx = tx, coords = NULL, tx_x = "x_location", tx_y = "y_location", feature_label = "feature_name", distance = 50, nbins = 200, cl = 12)
+```
+
+Not that this is exactly the same as extracting the matrix and coordinates out manually: 
+
+```{r, eval = FALSE}
+count_mat <- assay(spe)
+coords <- spatialCoords(spe)
+
+result <- denoist(mat = count_mat, tx = tx, coords = coords, tx_x = "x_location", tx_y = "y_location", feature_label = "feature_name", distance = 50, nbins = 200, cl = 1)
+```
+
+This is useful if you want to run DenoIST on a matrix that is not a `SpatialExperiment` object.
+
+# Check results
+
+The most useful output in `result` should be the `adjusted_counts`.
+
+```{r read_results}
+result <- readRDS('result.rds')
+```
+
+
+```{r check_results}
+result$adjusted_counts[1:5, 1:5]
+```
+The `memberships` and `params` are useful for debugging if the adjusted counts are not what you expect.
+
+```{r}
+result$memberships[1:5, 1:5]
+```
+```{r}
+result$params[[42]]
+```
+
+We can also quickly visualise the difference.
+
+```{r}
+# a custom helper function for plotting
+plot_feature_scatter <- function(coords, mat, feature, size = 0.1, output_filename = NULL) {
+  # Create a data frame from the coordinates and features
+  plot_data <- data.frame(x = coords[, 1], y = coords[, 2], feature = mat[feature,])
+  
+  # Create the scatterplot
+  p <- ggplot(plot_data, aes(x = x, y = y, color = feature)) +
+    geom_point(size = size, alpha = 0.5) +  # Make the dots smaller
+    theme_minimal() +
+    labs(title = feature, x = "X Coordinate", y = "Y Coordinate", color = "Feature") +
+    theme(legend.position = "right") +
+    scale_color_viridis_c()  # Use a color palette with higher contrast
+  
+  # Save the plot if an output filename is provided
+  if (!is.null(output_filename)) {
+    ggsave(output_filename, p, width = 10, height = 8, units = "in", dpi = 300)
+  }
+  
+  # Return the plot
+  return(p)
+}
+```
+
+```{r,fig.height=8, fig.width=10}
+orig <- plot_feature_scatter(coords = spatialCoords(spe), log(assay(spe)+1), feature = "EPAS1") + ggtitle('Original')
+adj <- plot_feature_scatter(coords = spatialCoords(spe), log(result$adjusted_counts+1), feature = "EPAS1") + ggtitle('DenoIST adjusted')
+(orig + adj) + plot_layout(guides = "collect")
+```
+

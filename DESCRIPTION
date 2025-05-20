@@ -22,4 +22,9 @@ Imports:
     tibble,
     tidyr
 Suggests:
-    testthat
+    knitr,
+    rmarkdown,
+    testthat,
+    ggplot2,
+    patchwork
+VignetteBuilder: knitr

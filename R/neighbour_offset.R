@@ -102,7 +102,7 @@ local_offset_distance_with_background <- function(mat,
     return(neighbors)
   }
   message("Finding neighbours...")
-  neighbors <- get_neighbors_within_distance(coords[, c("x", "y")], distance)
+  neighbors <- get_neighbors_within_distance(coords[, c(1,2)], distance)
   #print(neighbors[[1]])
 
   get_local_offset <- function(idx, neighbors, mat) {
