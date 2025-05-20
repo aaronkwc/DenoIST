@@ -51,7 +51,7 @@ spe
 Since the transcript file is too big to upload, for demonstration we will read in a very small subset to show the what the format is like:
 
 ```{r load_data}
-tx <- read.csv('tx_sub.rds')
+tx <- readRDS('tx_sub.rds')
 tx
 ```
 

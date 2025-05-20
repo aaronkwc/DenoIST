@@ -390,29 +390,30 @@ fibrosis study (Vannan &amp; Lyu et. al, 2025). It can be downloaded at
 <p>Since the transcript file is too big to upload, for demonstration we
 will read in a very small subset to show the what the format is
 like:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>tx <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;tx_sub.rds&#39;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; Warning in read.table(file = file, header = header, sep = sep, quote = quote, : line 2</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; appears to contain embedded nulls</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Warning in read.table(file = file, header = header, sep = sep, quote = quote, : line 3</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; appears to contain embedded nulls</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Warning in read.table(file = file, header = header, sep = sep, quote = quote, : line 4</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; appears to contain embedded nulls</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; Warning in read.table(file = file, header = header, sep = sep, quote = quote, : line 5</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; appears to contain embedded nulls</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; Warning in scan(file = file, what = what, sep = sep, quote = quote, dec = dec, : EOF within</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; quoted string</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; Warning in scan(file = file, what = what, sep = sep, quote = quote, dec = dec, : embedded</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; nul(s) found in input</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>tx</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;                                                                                                                                                                                   X</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 1                                                                                                                        @i\\\xae\xa7G\xd8\006@\034T3!\x95{\xfe@S8~AN~\xe9@Yu\0376&amp;</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 2                                                                                       \xba@b\xa2*ZF\x9ds@e\xeeR\xa8C\x80\x88@fk\xadW\xbc\177x@i6\xad\xab\x9fU\x9b@RT\xa0\x90-\xe0</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 3                                                                                                                                                                  @_\xc4\xcd_\x99Ë</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 4                                                                                                                                                                                @g</span></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 5 \xa4i\xd74/@[\x9a@c\x9d^J@h\x92+\xbeʫ\x8a@Z\xd8\0326\xe2\xeb\034@l\xf7\016\xe8\xd1\017R@er\xed\xfaC\xfe]@m9\xa8\031\x8f\035?@V\xb5\xe6p\xe2\xc1+@bi\xc6\xe6پM@N\xfa\xdd\005)4\xad</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 6                                                                                                               @1\xa3\x9d\033.Y\xb0@)_\xd9v\xff:\xde@){\x8biU.0@*\026!\xfa\xfc\x8b</span></span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 7                                                                                                                                                              @\aHD\xdd\177\xa2x@D</span></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; 8                                                                                   ^\003\xa6}\xad\xab@%\020R.\xa0\xfd;@8\xc5\xc0\xfc\xb4\xf1\xe5@\034\xe6\xba\xcftF\xfa@\bUV#C\xf8</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>tx <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&#39;tx_sub.rds&#39;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>tx</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;     X            transcript_id             cell_id overlaps_nucleus            feature_name</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 1   1 VUHD116A_281474976711003 VUHD116A_UNASSIGNED                0 NegControlCodeword_0517</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 2   2 VUHD116A_281474976711398 VUHD116A_UNASSIGNED                0                  COL1A1</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 3   3 VUHD116A_281474976711406 VUHD116A_UNASSIGNED                0                     LYZ</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 4   4 VUHD116A_281474976711409 VUHD116A_UNASSIGNED                0                   LAMP3</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5   5 VUHD116A_281474976711415 VUHD116A_UNASSIGNED                0                     LYZ</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6   6 VUHD116A_281474976711418 VUHD116A_UNASSIGNED                0                     LYZ</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 7   7 VUHD116A_281474976711421 VUHD116A_UNASSIGNED                0                   NUCB2</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 8   8 VUHD116A_281474976712029 VUHD116A_UNASSIGNED                0                   SFTPC</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 9   9 VUHD116A_281474976712842 VUHD116A_UNASSIGNED                0                  COL1A2</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; 10 10 VUHD116A_281474976712849 VUHD116A_UNASSIGNED                0                  FGFBP2</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;    x_location y_location z_location        qv fov_name nucleus_distance</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 1  202.896320  184.33257   17.63912  2.910288      Q15         329.0720</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; 2    7.082226  110.41018   12.68721 40.000000      Q15         537.2145</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 3   76.882706  196.56784   12.74130 40.000000      Q15         439.8191</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 4  101.830030  107.37660   13.04323 40.000000      Q15         455.0005</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 5  149.067670  231.72057   12.96732 10.863165      Q15         360.2229</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; 6  175.447590  171.59155   13.25221  3.295905      Q15         359.2819</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; 7  179.364910  233.80177   13.01727 10.531877      Q15         330.7972</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; 8  201.708700   90.84219   12.75298 24.772476      Q15         383.3843</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; 9   73.322300  147.30553   14.10094  7.225322      Q15         461.5779</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt; 10 127.075035   61.95987   21.58544  3.041668      Q15         459.5809</span></span></code></pre></div>
 </div>
 <div id="denoising-the-data" class="section level1">
 <h1>Denoising the data</h1>
