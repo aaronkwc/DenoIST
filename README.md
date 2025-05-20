@@ -12,6 +12,8 @@ DenoIST is a package for denoising image-based spatial transcriptomics data. It 
 
 The package is designed to be used with the [SpatialExperiment](https://bioconductor.org/packages/release/bioc/html/SpatialExperiment.html) class. If you are using a different format, a matrix input with a data frame of coordinates can also be accepted.
 
+This is still very much a work in progress and we are still working on the documentation. Please feel free to open an issue if you have any questions or suggestions.
+
 ## Installation:
 
 ```         
@@ -70,3 +72,9 @@ res <- denoist(mat = mat,
                out_dir = "denoist_results")
 print(res$adjusted_counts)
 ```
+
+## Vignette
+
+A brief vignette:
+
+[Denoising healthy lung Xenium data](https://rawcdn.githack.com/aaronkwc/DenoIST/ccecd5de367cdf72e98fb37f0b7b1208cb951e01/vignettes/denoist_spe.html)
