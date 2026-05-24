@@ -14,7 +14,10 @@ local_offset_distance_with_background_fast(
   distance = 50,
   nbins = 200,
   cl = 1,
-  verbose = FALSE
+  verbose = FALSE,
+  on_disk = FALSE,
+  on_disk_dir = NULL,
+  block_size = 5000L
 )
 }
 \arguments{
@@ -37,6 +40,12 @@ local_offset_distance_with_background_fast(
 \item{cl}{The number of cores to use for parallel processing.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
+
+\item{on_disk}{Logical, if TRUE write output in column blocks to disk and return block metadata instead of an in-memory dense matrix.}
+
+\item{on_disk_dir}{Optional directory used when on_disk is TRUE. If NULL, a temporary directory is created.}
+
+\item{block_size}{Number of columns to process per block in the fast matrix multiplication step.}
 }
 \value{
 A matrix of local background counts for each gene in each cell.

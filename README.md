@@ -15,6 +15,9 @@ The package is designed to be used with the [SpatialExperiment](https://biocondu
 This is still very much a work in progress and we are still working on the documentation. Please feel free to open an issue or email at akwok@svi.edu.au if you have any questions or suggestions.
 
 ## News:
+- **2026-05-24**: Minor update
+  - Added `on_disk` mode to `denoist()` for large datasets that do not fit in memory.
+
 - **2026-03-17**: Major update
   - Added `local_offset_distance_with_background_fast` function which uses `dbscan` for faster neighbour finding. Also fixed critical bug that causes wrong distance calculation.
   - `denoist()` now defaults to fast neighbour finding via the `neighbour_mode` option.

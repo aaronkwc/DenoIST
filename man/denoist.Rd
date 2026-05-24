@@ -18,6 +18,13 @@ denoist(
   cl = 1,
   out_dir = NULL,
   neighbour_mode = "fast",
+  init_scheme = "random",
+  on_disk = FALSE,
+  offset_on_disk = FALSE,
+  block_size = 5000,
+  return_params = TRUE,
+  keep_posterior = TRUE,
+  sparse_membership = FALSE,
   verbose = FALSE
 )
 }
@@ -47,6 +54,20 @@ denoist(
 \item{out_dir}{The output directory to save the results.}
 
 \item{neighbour_mode}{The method to use for finding neighbors. Options are 'fast' (default) and 'original'. 'fast' uses a faster implementation with dbscan, while 'original' uses the original implementation.}
+
+\item{init_scheme}{The method to use for initializing the mixing proportion in the Poisson mixture model. Options are 'random' (default) and 'kmeans++'. 'random' generates random initial values, while 'kmeans++' uses a k-means++ inspired approach to generate initial values.}
+
+\item{on_disk}{Logical, if TRUE, use on-disk processing with HDF5Array to handle large datasets that may not fit in memory. If FALSE (default), process in-memory.}
+
+\item{offset_on_disk}{Logical, if TRUE, compute neighbour offsets in on-disk block mode for the fast neighbour function. If FALSE (default), keep the original in-memory off_mat behavior.}
+
+\item{block_size}{The number of cells to process in each block when using parallel processing. Adjust this based on available memory and number of cores.}
+
+\item{return_params}{Logical, if TRUE (default), return per-cell model parameters in the \code{params} output slot. Set to FALSE to reduce memory usage.}
+
+\item{keep_posterior}{Logical, if TRUE (default), include posterior vectors in \code{params}. Set to FALSE to reduce memory usage when processing large datasets.}
+
+\item{sparse_membership}{Logical, if TRUE, request sparse per-cell membership output from the PMM solver during computation and return memberships in an index-based sparse representation (zero indices per column), avoiding dense memberships matrix allocation.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
 }

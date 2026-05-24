@@ -25,7 +25,11 @@ Imports:
     parallel,
     Matrix,
     dbscan,
-    methods
+    methods,
+    DelayedArray,
+    HDF5Array
+LinkingTo: 
+    Rcpp
 Suggests:
     BiocStyle,
     knitr,
