@@ -1,3 +1,7 @@
+## Version 1.0.1 (2026-05-24)
+
+* Added `on_disk` mode to `denoist()` for large datasets that do not fit in memory.
+
 ## Version 0.99.4 (2026-03-17)
 
 * Added `local_offset_distance_with_background_fast` function which uses `dbscan` for faster neighour finding.

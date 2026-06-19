@@ -10,7 +10,13 @@ solve_poisson_mixture(
   max_iter = 5000,
   tol = 1e-06,
   n_inits = 10,
+  init_scheme = "random",
+  seed = 42,
   posterior_cutoff = 0.6,
+  return_posterior = TRUE,
+  use_cpp = TRUE,
+  membership_output = c("full", "sparse"),
+  pad_length = FALSE,
   verbose = FALSE
 )
 }
@@ -25,15 +31,29 @@ solve_poisson_mixture(
 
 \item{n_inits}{Number of initial values for the mixing proportion inference. If input is a vector, directly use the vector has init values.}
 
+\item{init_scheme}{Initialization scheme for the EM algorithm. Options are 'random' for random initialization and 'kmeanspp' for k-means++ initialization.}
+
+\item{seed}{Random seed used for k-means++ initialization.}
+
 \item{posterior_cutoff}{Cutoff for posterior probabilities to assign memberships.}
+
+\item{return_posterior}{Logical, if TRUE (default), return full posterior probabilities. Set to FALSE to reduce memory usage.}
+
+\item{use_cpp}{Logical, if TRUE, use the Rcpp EM loop for faster in-place computations.}
+
+\item{membership_output}{Format of membership return value. Options are 'full' (default) to return a full 0/1 vector, and 'sparse' to return only zero-membership indices.}
+
+\item{pad_length}{Logical, if TRUE, pad outputs to the original input length. Currently kept for backward compatibility.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
 }
 \value{
 {
 A list containing the following elements:
-\item{memberships}{A vector indicating the membership of each observation (0 or 1).}
-\item{posterior}{A vector of posterior probabilities for each observation.}
+\item{memberships}{A vector indicating the membership of each observation (0 or 1), returned when \code{membership_output = "full"}.}
+\item{membership_zero_idx}{Integer indices where membership is 0, returned when \code{membership_output = "sparse"}.}
+\item{n}{Original input length, returned when \code{membership_output = "sparse"}.}
+\item{posterior}{A vector of posterior probabilities for each observation, returned when \code{return_posterior = TRUE}.}
 \item{lambda1}{Estimated parameter for the first component.}
 \item{lambda2}{Estimated parameter for the second component.}
 \item{pi}{Estimated mixing proportion.}

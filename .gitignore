@@ -15,4 +15,11 @@ DenoIST.Rproj
 .git
 /doc/
 /Meta/
+
 test_script_temp.R
+merge-denoist-quadrants.R
+slurm*
+/singularity/
+/tmp_logs/
+/tmp_output/
+/tmp_scripts/
