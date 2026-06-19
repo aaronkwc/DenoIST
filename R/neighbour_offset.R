@@ -93,7 +93,7 @@ local_offset_distance_with_background <- function(mat,
   # Build the contingency matrix from lightweight vectors to avoid growing tx.
   hexbin_id <- hex_bins@cID
   feature_name <- tx[[feature_label]]
-  gene_bin_matrix <- xtabs(~ feature_name + hexbin_id)
+  gene_bin_matrix <- xtabs(~ feature_name + hexbin_id, sparse = TRUE)
   if(verbose){
     message(sprintf("[debug] gene_bin_matrix dims: %d genes x %d bins", nrow(gene_bin_matrix), ncol(gene_bin_matrix)))
   }
